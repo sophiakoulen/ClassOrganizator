@@ -16,5 +16,10 @@ namespace ClassOrganizator
             this._firstName = firstName;
             this._lastName = lastName;
         }
+
+        public string Serialize()
+        {
+            return $"{_firstName} {_lastName}";
+        }
     }
 }

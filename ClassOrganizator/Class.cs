@@ -8,12 +8,13 @@ namespace ClassOrganizator
 {
     internal class Class
     {
+        private string _name;
         private Person _teacher;
         private List<string> _students;
 
         public Class(Person teacher)
         {
-            this.teacher = teacher;
+            this._teacher = teacher;
         }
 
         public void addStudent(string userName)
