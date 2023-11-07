@@ -56,10 +56,7 @@ while (true)
         else if (action == "DELETE person")
         {
             var id = prompt("id: ");
-            var idInt = int.Parse(id);
-
-            personManager.Remove(idInt);
-            classManager.RemoveWhereTeacherIs(idInt);
+            classManager.RemovePerson(int.Parse(id));
         }
         else if (action == "SHOW person")
         {

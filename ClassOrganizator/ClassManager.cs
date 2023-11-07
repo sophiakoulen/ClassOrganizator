@@ -96,7 +96,13 @@ namespace ClassOrganizator
             _dictionary.Remove(id);
         }
 
-        public void RemoveWhereTeacherIs(int teacherId)
+        public void RemovePerson(int id)
+        {
+            _personManager.Remove(id);
+            RemoveWhereTeacherIs(id);
+        }
+
+        private void RemoveWhereTeacherIs(int teacherId)
         {
             foreach(var entry in _dictionary)
             {
