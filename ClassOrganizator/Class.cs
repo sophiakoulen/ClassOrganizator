@@ -8,31 +8,42 @@ namespace ClassOrganizator
 {
     internal class Class
     {
-        private string _name;
-        private Person _teacher;
-        private List<string> _students;
+        public readonly string Name;
+        public readonly int TeacherId;
+        private List<int> _students;
 
-        public Class(Person teacher)
+        public IReadOnlyList<int> Students => _students;
+
+        public Class(int teacherId, string name)
         {
-            this._teacher = teacher;
+            TeacherId = teacherId;
+            Name = name;
+            _students = new List<int>();
         }
 
-        public void addStudent(string userName)
+        public string Serialize(IReadOnlyDictionary<int, Person> dictionary)
         {
-            if (_students.Contains(userName))
-            {
-                throw new Exception($"student '{userName}' is already a member of this class");
-            }
-            _students.Add(userName);
+            return $"Name: {Name}, Teacher: {dictionary[TeacherId].Serialize()}";
         }
 
-        public void removeStudent(string userName)
+        
+
+        public void addStudent(int studentId)
         {
-            if (! _students.Contains(userName))
+            if (_students.Contains(studentId))
             {
-                throw new Exception($"student '{userName}' is not a member if this class");
+                throw new Exception($"student '{studentId}' is already a member of this class");
             }
-            _students.Remove(userName);
+            _students.Add(studentId);
+        }
+
+        public void removeStudent(int studentId)
+        {
+            if (! _students.Contains(studentId))
+            {
+                throw new Exception($"student '{studentId}' is not a member if this class");
+            }
+            _students.Remove(studentId);
         }
     }
 }

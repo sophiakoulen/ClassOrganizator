@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace ClassOrganizator
 {
+    [DebuggerDisplay("{Serialize()}")]
     internal class Person
     {
-        private string _firstName;
-        private string _lastName;
+        private readonly string _firstName;
+        private readonly string _lastName;
 
         public Person(string firstName, string lastName)
         {
-            this._firstName = firstName;
-            this._lastName = lastName;
+            _firstName = firstName;
+            _lastName = lastName;
         }
 
-        public string Serialize()
-        {
-            return $"{_firstName} {_lastName}";
-        }
+        public string Serialize() => $"{_firstName} {_lastName}";
+
     }
 }

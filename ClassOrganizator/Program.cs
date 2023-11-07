@@ -14,88 +14,121 @@ Console.WriteLine("Welcome to Class Organizator");
  * - delete a person
 */
 
-Dictionary<string, Person> person_db = new Dictionary<string, Person>();
-Dictionary<string, Class> class_db = new Dictionary<string, Class>();
+var personManager = new PersonManager();
+var classManager = new ClassManager();
 
 while (true)
 {
-    string action = prompt("ctor> ");
-    if (action == "CREATE class")
+    try
     {
-        string id = prompt("Name: ");
 
-        if (class_db.ContainsKey(id))
+        var action = prompt("ctor> ");
+        if (action == "CREATE class")
         {
-            Console.Error.WriteLine($"Conflict: a Class with id {id} already exists");
-            continue;
+            var name = prompt("Name: ");
+            var teacherId = prompt("Teacher id: ");
+
+            var teacherIdInt = int.Parse(teacherId);
+
+            if (!personManager.Exists(teacherIdInt))
+            {
+                Console.Error.WriteLine($"Not found: no person with id '{teacherIdInt}' exists");
+                continue;
+            }
+
+            var @class = new Class(teacherIdInt, name);
+            classManager.Add(@class);
         }
-
-        string teacherId = prompt("Teacher's username: ");
-
-        if (!person_db.ContainsKey(teacherId))
+        else if (action == "DELETE class")
         {
-            Console.Error.WriteLine($"Not found: no Person with id {teacherId}");
-            continue;
+            var id = prompt("Class id: ");
+            classManager.Remove(int.Parse(id));
         }
+        else if (action == "CREATE person")
+        {
 
-        Class @class = new Class(person_db[teacherId]);
-        class_db[teacherId] = @class;
+            var firstname = prompt("First name: ");
+            var lastname = prompt("Last name: ");
+
+            var person = new Person(firstname, lastname);
+            personManager.Add(person);
+        }
+        else if (action == "DELETE person")
+        {
+            var id = prompt("id: ");
+            var idInt = int.Parse(id);
+
+            personManager.Remove(idInt);
+            classManager.RemoveWhereTeacherIs(idInt);
+        }
+        else if (action == "SHOW person")
+        {
+            personManager.ShowAll();
+        }
+        else if (action == "SHOW class")
+        {
+            classManager.ShowAll(personManager.Dictionary);
+        }
+        else if (action == "ADD")
+        {
+            var studentId = prompt("Student id: ");
+            var classId = prompt("Class id: ");
+
+            var studentIdInt = int.Parse(studentId);
+            var classIdInt = int.Parse(classId);
+
+            var @class = classManager.Get(classIdInt);
+            @class.addStudent(studentIdInt);
+        }
+        else if (action == "REMOVE")
+        {
+            var studentId = prompt("Student id: ");
+            var classId = prompt("Class id: ");
+
+            var studentIdInt = int.Parse(studentId);
+            var classIdInt = int.Parse(classId);
+
+            if (!personManager.Exists(studentIdInt))
+            {
+                Console.Error.WriteLine($"Not found: no person with id '{studentIdInt}' exists");
+                continue;
+            }
+
+            var @class = classManager.Get(classIdInt);
+            @class.removeStudent(studentIdInt);
+        }
+        else if (action == "SHOW ONE class")
+        {
+            var classId = prompt("Class id: ");
+            var classIdInt = int.Parse(classId);
+
+            classManager.ShowOne(classIdInt, personManager.Dictionary);
+        }
+        else if (action == "SHOW ONE person")
+        {
+            var personId = prompt("Person id: ");
+            var personIdInt = int.Parse(personId);
+
+            personManager.ShowOne(personIdInt, classManager.Dictionary);
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
-    else if (action == "DELETE class")
+    catch (Exception ex)
     {
-        string id = prompt("Name: ");
-
-        if (!class_db.ContainsKey(id))
-        {
-            Console.Error.WriteLine($"Not found: no Class with id {id} exists");
-            continue;
-        }
-
-        class_db.Remove(id);
-    }
-    else if (action == "CREATE person")
-    {
-        Console.Write("Username: ");
-        string id = Console.ReadLine();
-
-        if (person_db.ContainsKey(id))
-        {
-            Console.Error.WriteLine($"Conflict: a person with id {id} already exists");
-            continue;
-        }
-
-        string firstname = prompt("First name: ");
-        string lastname = prompt("Last name: ");
-
-        person_db[id] = new Person(firstname, lastname);
-    }
-    else if (action == "DELETE person")
-    {
-        string id = prompt("Userame: ");
-
-        if (!person_db.ContainsKey(id))
-        {
-            Console.Error.WriteLine($"Not found: no person with id {id} exists");
-        }
-
-        person_db.Remove(id);
-    }
-    else if (action == "SHOW person")
-    {
-        foreach (KeyValuePair<string, Person> p in person_db)
-        {
-            Console.WriteLine($"\t{p.Value.Serialize()} ({p.Key})");
-        }
-    }
-    else
-    {
-        Console.Error.WriteLine("Not implemented");
+        Console.Error.WriteLine(ex.Message);
     }
 }
 
 string prompt(string str)
 {
     Console.Write(str);
-    string line = Console.ReadLine();
-    return (line);
+    var line = Console.ReadLine();
+    if (line == null)
+    {
+        Environment.Exit(0);
+    }
+    return line;
 }
