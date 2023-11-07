@@ -41,6 +41,33 @@ namespace ClassOrganizator
             }
         }
 
+        public void ShowOnePersonsClasses(int personId)
+        {
+            var person = _personManager.Dictionary[personId];
+
+            Console.WriteLine($"{person.Serialize()}");
+
+            Console.Write("Is teaching: ");
+            foreach (var entry in _dictionary)
+            {
+                if (entry.Value.TeacherId == personId)
+                {
+                    Console.Write($"{entry.Value.Name} ");
+                }
+            }
+            Console.Write(Environment.NewLine);
+
+            Console.Write("Is student: ");
+            foreach (var entry in _dictionary)
+            {
+                if (entry.Value.Students.Contains(personId))
+                {
+                    Console.Write($"{entry.Value.Name}");
+                }
+            }
+            Console.Write(Environment.NewLine);
+        }
+
         public Class Get(int id)
         {
             if (! _dictionary.ContainsKey(id))

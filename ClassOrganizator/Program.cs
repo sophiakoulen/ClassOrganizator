@@ -109,7 +109,7 @@ while (true)
             var personId = prompt("Person id: ");
             var personIdInt = int.Parse(personId);
 
-            personManager.ShowOne(personIdInt, classManager.Dictionary);
+            classManager.ShowOnePersonsClasses(personIdInt);
         }
         else
         {

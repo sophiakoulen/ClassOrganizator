@@ -21,29 +21,6 @@ namespace ClassOrganizator
             }
         }
 
-        public void ShowOne(int id, IReadOnlyDictionary<int, Class> classDictionary)
-        {
-            Console.WriteLine($"{_dictionary[id].Serialize()}");
-            Console.Write("Is teaching: ");
-            foreach (var entry in classDictionary)
-            {
-                if (entry.Value.TeacherId == id)
-                {
-                    Console.Write($"{entry.Value.Name} ");
-                }
-            }
-            Console.Write(Environment.NewLine);
-            Console.Write("Is student: ");
-            foreach (var entry in classDictionary)
-            {
-                if (entry.Value.Students.Contains(id))
-                {
-                    Console.Write($"{entry.Value.Name}");
-                }
-            }
-            Console.Write(Environment.NewLine);
-        }
-
         public Person Get(int id)
         {
             if (!_dictionary.ContainsKey(id))
