@@ -21,13 +21,6 @@ namespace ClassOrganizator
             _students = new List<int>();
         }
 
-        public string Serialize(IReadOnlyDictionary<int, Person> dictionary)
-        {
-            return $"Name: {Name}, Teacher: {dictionary[TeacherId].Serialize()}";
-        }
-
-        
-
         public void addStudent(int studentId)
         {
             if (_students.Contains(studentId))

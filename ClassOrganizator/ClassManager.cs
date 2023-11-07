@@ -8,29 +8,35 @@ namespace ClassOrganizator
 {
     internal class ClassManager
     {
+        private PersonManager _personManager;
         private IDictionary<int, Class> _dictionary = new Dictionary<int, Class>();
-        public IReadOnlyDictionary<int, Class> Dictionary => _dictionary as IReadOnlyDictionary<int, Class>;
-
         private int _idCount = 0;
 
-        public void ShowAll(IReadOnlyDictionary<int, Person> personDictionary)
+        public ClassManager(PersonManager personManager)
+        {
+            _personManager = personManager;
+        }
+
+        public IReadOnlyDictionary<int, Class> Dictionary => _dictionary as IReadOnlyDictionary<int, Class>;
+
+
+        public void ShowAll()
         {
             foreach (var entry in _dictionary)
             {
-                Console.WriteLine($"{entry.Key} - {entry.Value.Serialize(personDictionary)}");
+                Console.WriteLine($"{entry.Key} - {SerializeOne(entry.Key)}");
             }
         }
 
-        public void ShowOne(int id, IReadOnlyDictionary<int, Person> personDictionary)
+        public void ShowOne(int id)
         {
             var @class = _dictionary[id];
-            var teacher = personDictionary[@class.TeacherId];
 
-            Console.WriteLine($"{@class.Serialize(personDictionary)}");
+            Console.WriteLine($"{SerializeOne(id)}");
             Console.WriteLine("Students:");
             foreach (var studentId in @class.Students)
             {
-                var student = personDictionary[studentId];
+                var student = _personManager.Dictionary[studentId];
                 Console.WriteLine($"\t{studentId} - {student.Serialize()}");
             }
         }
@@ -72,6 +78,13 @@ namespace ClassOrganizator
                     _dictionary.Remove(entry.Key);
                 }
             }
+        }
+
+        private string SerializeOne(int id)
+        {
+            var @class = _dictionary[id];
+            var teacher = _personManager.Get(id);
+            return $"Name: {@class.Name}, Teacher: {teacher.Serialize()}";
         }
     }
 }

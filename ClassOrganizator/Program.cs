@@ -15,7 +15,7 @@ Console.WriteLine("Welcome to Class Organizator");
 */
 
 var personManager = new PersonManager();
-var classManager = new ClassManager();
+var classManager = new ClassManager(personManager);
 
 while (true)
 {
@@ -67,7 +67,7 @@ while (true)
         }
         else if (action == "SHOW class")
         {
-            classManager.ShowAll(personManager.Dictionary);
+            classManager.ShowAll();
         }
         else if (action == "ADD")
         {
@@ -102,7 +102,7 @@ while (true)
             var classId = prompt("Class id: ");
             var classIdInt = int.Parse(classId);
 
-            classManager.ShowOne(classIdInt, personManager.Dictionary);
+            classManager.ShowOne(classIdInt);
         }
         else if (action == "SHOW ONE person")
         {
