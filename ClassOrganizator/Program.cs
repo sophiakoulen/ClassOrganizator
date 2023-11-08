@@ -97,16 +97,12 @@ while (true)
         else if (action == "SHOW ONE class")
         {
             var classId = prompt("Class id: ");
-            var classIdInt = int.Parse(classId);
-
-            classManager.ShowOne(classIdInt);
+            classManager.ShowOne(int.Parse(classId));
         }
         else if (action == "SHOW ONE person")
         {
             var personId = prompt("Person id: ");
-            var personIdInt = int.Parse(personId);
-
-            classManager.ShowOnePersonsClasses(personIdInt);
+            classManager.ShowOnePersonsClasses(int.Parse(personId));
         }
         else
         {
