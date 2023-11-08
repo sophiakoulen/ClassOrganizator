@@ -16,6 +16,7 @@ Console.WriteLine("Welcome to Class Organizator");
 
 var personManager = new PersonManager();
 var classManager = new ClassManager(personManager);
+var favouriteManager = new FavouriteClassManager(personManager, classManager);
 
 while (true)
 {
@@ -103,6 +104,26 @@ while (true)
         {
             var personId = prompt("Person id: ");
             classManager.ShowOnePersonsClasses(int.Parse(personId));
+        }
+        else if (action == "SET favourite")
+        {
+            var personId = prompt("Student id: ");
+            var classId = prompt("Favourite class id: ");
+            favouriteManager.Set(int.Parse(personId), int.Parse(classId));
+        }
+        else if (action == "UNSET favourite")
+        {
+            var personId = prompt("Student id: ");
+            favouriteManager.UnSet(int.Parse(personId));
+        }
+        else if (action == "SHOW favourite")
+        {
+            favouriteManager.ShowAll();
+        }
+        else if (action == "SHOW ONE favourite")
+        {
+            var personId = prompt("Person id: ");
+            favouriteManager.ShowOne(int.Parse(personId));
         }
         else
         {

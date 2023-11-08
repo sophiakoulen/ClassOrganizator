@@ -102,6 +102,13 @@ namespace ClassOrganizator
             RemoveWhereTeacherIs(id);
         }
 
+        public string SerializeOne(int id)
+        {
+            var @class = _dictionary[id];
+            var teacher = _personManager.Get(id);
+            return $"Name: {@class.Name}, Teacher: {teacher.Serialize()}";
+        }
+
         private void RemoveWhereTeacherIs(int teacherId)
         {
             foreach(var entry in _dictionary)
@@ -113,11 +120,5 @@ namespace ClassOrganizator
             }
         }
 
-        private string SerializeOne(int id)
-        {
-            var @class = _dictionary[id];
-            var teacher = _personManager.Get(id);
-            return $"Name: {@class.Name}, Teacher: {teacher.Serialize()}";
-        }
     }
 }
