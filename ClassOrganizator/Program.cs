@@ -22,7 +22,6 @@ while (true)
 {
     try
     {
-
         var action = prompt("ctor> ");
         if (action == "CREATE class")
         {

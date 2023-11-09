@@ -6,23 +6,18 @@ using System.Threading.Tasks;
 
 namespace ClassOrganizator
 {
-    internal class ClassManager
+    internal class ClassManager : BasicManager<Class>
     {
         private PersonManager _personManager;
-        private IDictionary<int, Class> _dictionary = new Dictionary<int, Class>();
-        private int _idCount = 0;
 
         public ClassManager(PersonManager personManager)
         {
             _personManager = personManager;
         }
 
-        public IReadOnlyDictionary<int, Class> Dictionary => _dictionary as IReadOnlyDictionary<int, Class>;
-
-
         public void ShowAll()
         {
-            foreach (var entry in _dictionary)
+            foreach (var entry in Dictionary)
             {
                 Console.WriteLine($"{entry.Key} - {SerializeOne(entry.Key)}");
             }
@@ -30,7 +25,7 @@ namespace ClassOrganizator
 
         public void ShowOne(int id)
         {
-            var @class = _dictionary[id];
+            var @class = Dictionary[id];
 
             Console.WriteLine($"{SerializeOne(id)}");
             Console.WriteLine("Students:");
@@ -48,7 +43,7 @@ namespace ClassOrganizator
             Console.WriteLine($"{person.Serialize()}");
 
             Console.Write("Is teaching: ");
-            foreach (var entry in _dictionary)
+            foreach (var entry in Dictionary)
             {
                 if (entry.Value.TeacherId == personId)
                 {
@@ -58,7 +53,7 @@ namespace ClassOrganizator
             Console.Write(Environment.NewLine);
 
             Console.Write("Is student: ");
-            foreach (var entry in _dictionary)
+            foreach (var entry in Dictionary)
             {
                 if (entry.Value.Students.Contains(personId))
                 {
@@ -66,34 +61,6 @@ namespace ClassOrganizator
                 }
             }
             Console.Write(Environment.NewLine);
-        }
-
-        public Class Get(int id)
-        {
-            if (! _dictionary.ContainsKey(id))
-            {
-                throw new Exception("Not found.");
-            }
-            return _dictionary[id];
-        }
-
-        public bool Exists(int id)
-        {
-            return _dictionary.ContainsKey(id);
-        }
-
-        public void Add(Class @class)
-        {
-            _dictionary[_idCount++] = @class;
-        }
-
-        public void Remove(int id)
-        {
-            if (!_dictionary.ContainsKey(id))
-            {
-                throw new Exception("Not found.");
-            }
-            _dictionary.Remove(id);
         }
 
         public void RemovePerson(int id)
@@ -104,18 +71,18 @@ namespace ClassOrganizator
 
         public string SerializeOne(int id)
         {
-            var @class = _dictionary[id];
+            var @class = Dictionary[id];
             var teacher = _personManager.Get(id);
             return $"Name: {@class.Name}, Teacher: {teacher.Serialize()}";
         }
 
         private void RemoveWhereTeacherIs(int teacherId)
         {
-            foreach(var entry in _dictionary)
+            foreach(var entry in Dictionary)
             {
                 if (entry.Value.TeacherId == teacherId)
                 {
-                    _dictionary.Remove(entry.Key);
+                    Remove(entry.Key);
                 }
             }
         }
